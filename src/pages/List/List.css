@@ -1,0 +1,175 @@
+.list-table-format{
+    display: grid;
+    grid-template-columns: 0.6fr 0.8fr 0.8fr 0.6fr 0.6fr 0.6fr ;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 15px;
+    border: 2px solid grey;
+    font-size: 17px;
+    border: 1px solid black;
+    box-shadow: 0px 0px 10px black;
+    border-radius: 20px;
+    margin-bottom: 15px;
+    
+    
+}
+.list-table-format.ti{
+    background-color: aliceblue;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-content: center;
+    border: 1px solid black;
+    box-shadow: 0px 0px 10px black;
+    border-radius: 20px;
+    margin-top: 20px;
+    
+}
+.list-table-format img{
+    width: 70px;
+    height: 60px;
+    border: 1px solid grey;
+    box-shadow: 0px 0px 0px 1px turquoise;
+    border-radius: 10%;
+    
+}
+.pop{
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-left: 0px;
+    justify-content: space-around;
+    font-size: 16px;
+}
+.list{
+    margin-left: 80px;
+    margin-top: 50px;
+    justify-content: center;
+    align-items: center;
+    
+    
+    
+}
+.list h2{
+    display: flex;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 600;
+    margin-top: -28px;
+}
+
+.list-table{
+    margin-left: 40px;
+    margin-top: 0px;
+    
+
+}
+.cursor{
+    cursor: pointer;
+    margin-left: 50px;
+    color: red;
+}
+.phone{
+    color: blue;
+    font-size: 13px;
+}
+.brand{
+    color: green;
+    font-weight: 800;
+}
+.city{
+    color: black;
+    font-size: 17px;
+}
+.street{
+    color: grey;
+    font-size: 13px;
+}
+@media (max-width:320px){
+    .list-table-format{
+        display: grid;
+        grid-template-columns: 0.4fr 0.5fr 0.5fr 0.5fr 0.1fr 0.1fr ;
+        align-items: center;
+        padding: 3px 7.5px;
+        gap: 7px;
+        border: 1.2px solid grey;
+        font-size: 9.5px;
+        
+    }
+    .list-table-format.ti{
+        background-color: aliceblue;
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-content: center;
+        
+    }
+    .list-table-format img{
+        width: 25px;
+        border: 1px solid grey;
+    }
+    .pop{
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-left: 0px;
+        justify-content: space-around;
+        font-size: 7px;
+        font-weight: 500;
+        margin-left: 8px;
+    }
+    .list{
+        margin-left: -10px;
+        margin-top: 10px;
+        justify-content: center;
+        align-items: center;
+        
+    }
+    .list h2{
+        display: flex;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 500;
+        margin-top: 0px;
+        margin-left: 10px;
+        color: tomato;
+        
+    }
+    
+    .list-table{
+        margin-left: 15px;
+        margin-top: 10px;
+        border: 1.2px solid tomato;
+    
+    }
+    .cursor{
+        cursor: pointer;
+        color: red;
+        font-size: 12px;
+        margin-left: 20px;
+    }
+    .phone{
+        color: blue;
+        font-size: 6px;
+        
+    }
+    .stor .phone{
+        margin-left: 0px;
+    }
+    .stor{
+        margin-right: -10px;
+    }
+    
+    .brand{
+        color: green;
+        font-weight: 500;
+        font-size: 6px;
+    }
+    .city{
+        color: black;
+        font-size: 6px;
+    }
+    .street{
+        color: grey;
+        font-size: 6px;
+    }
+    
+}

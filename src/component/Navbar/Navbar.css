@@ -1,0 +1,49 @@
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 5%;
+}
+.navbar h2{
+    color: tomato;
+    font-size: 29px;
+    font-weight: 600;
+}
+.navbar h2 p{
+    color: black;
+    font-size: 12px;
+    font-weight: 600;
+}
+.navbar img{
+    height: 60px;
+    width: 60px;
+    border-radius: 100%;
+}
+@media (max-width:320px){
+    .navbar{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 5%;
+        width: 100%;
+    }
+    .navbar h2{
+        color: tomato;
+        font-size: 20px;
+        font-weight: 600;
+        
+    }
+    .navbar h2 p{
+        color: black;
+        font-size: 12px;
+        font-weight: 600;
+        
+    }
+    .navbar img{
+        height: 50px;
+        width: 50px;
+        border-radius: 100%;
+        margin-right: 30px;
+    }
+
+}

@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: outfit;
+
+}
+body{
+  min-height: 100vh;
+  background-color: white;
+}
+/*.toastBody {
+  font-family: "Atlas Grotesk Web", Arial, Helvetica, sans-serif;
+  color: white; 
+  background-color: green;
+  font-size: 10px;
+}
+  */
+
+a{
+  text-decoration: none;
+  color: inherit;
+}
+hr{
+  border: none;
+  height: 2px;
+  background-color: aqua;
+}
+.app-cont{
+  display: flex;
+}
+.form1{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
