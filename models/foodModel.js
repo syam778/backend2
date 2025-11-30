@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { type } from "os";
 
 
 const foodSchema = new mongoose.Schema({
@@ -10,7 +11,8 @@ const foodSchema = new mongoose.Schema({
     firstName:{type:String,require:true},
     phone:{type:Number,require:true},
     street:{type:String,require:true},
-    city:{type:String,require:true}
+    city:{type:String,require:true},
+    maps:{type:String,require:true},
     
 })
 const foodModel = mongoose.models.food || mongoose.model("food",foodSchema);

@@ -16,7 +16,8 @@ import express from "express"
         firstName:req.body.firstName,
         phone:req.body.phone,
         street:req.body.street,
-        city:req.body.city
+        city:req.body.city,
+        maps:req.body.maps
     })
     try{
         await food.save();
