@@ -44,7 +44,7 @@ const removeFormCard = async (req,res) => {
 
 }
 //fetch user card data
-const getCard = async (req,res) => {
+/*const getCard = async (req,res) => {
     try {
         let userData = await userModel.findById(req.body.userId);
         let cardData = await userData.cardData;
@@ -55,7 +55,70 @@ const getCard = async (req,res) => {
         
     }
 
-}
+}*/
+ const getCard = async (req, res) => {
+  try {
+    const card = await userModel.findOne({ userId: req.user.id }); // or whatever query you use
+
+    // ❌ Previous code would fail here if card is null:
+    // const data = card.cardData;
+
+    if (!card) {
+      return res.status(404).json({
+        success: false,
+        message: "Card not found",
+      });
+    }
+
+    // ✅ Safe to access now
+    const cardData = card.cardData;
+
+    res.status(200).json({
+      success: true,
+      cardData,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+
+export const getCartData = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "userId is required",
+      });
+    }
+
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      cartData: user.cartData || {},
+    });
+  } catch (err) {
+    console.error("GET CART ERROR 👉", err);
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
 export { addToCard, removeFormCard, getCard };
 
 

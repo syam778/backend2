@@ -7,8 +7,45 @@ import bcrypt from "bcrypt";
 import validator from "validator";
 
 
+
+// ✅ GET ALL USERS
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await userModel.find().select("-password"); // hide password
+
+    res.json({
+      success: true,
+      data: users,
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// ✅ DELETE USER
+export const deleteUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    await userModel.findByIdAndDelete(id);
+
+    res.json({
+      success: true,
+      message: "User deleted successfully",
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 const loginUser = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, } = req.body;
     try {
         const user = await userModel.findOne({ email });
         if (!user) {
@@ -16,7 +53,7 @@ const loginUser = async (req, res) => {
 
         }
         const isMatch = await bcrypt.compare(password, user.password);
-        if (isMatch) {
+        if (!isMatch) {
             return res.json({ success: false, message: "invalide user" })
         }
         const token = createToken(user._id)
@@ -29,6 +66,7 @@ const loginUser = async (req, res) => {
 
 
 }
+
 const createToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET)
 }
@@ -43,9 +81,7 @@ const registerUser = async (req, res) => {
         if (!validator.isEmail(email)) {
             return res.json({ success: false, message: "please enter a valid email" })
         }
-        if (mobile_number.length < 10 || mobile_number.length >11) {
-            return res.json({ success: false, message: "please enter Your Mobile Number" })
-        }
+        
         if (password.length < 8) {
             return res.json({ success: false, message: "please enter a storng password" })
         }
@@ -54,7 +90,6 @@ const registerUser = async (req, res) => {
         const newUser = new userModel({
             name: name,
             email: email,
-            mobile_number:mobile_number,
             password: hashedPassword
         })
         const user = await newUser.save()
@@ -66,5 +101,7 @@ const registerUser = async (req, res) => {
 
     }
 
-}
-export { loginUser, registerUser }
+};
+
+
+export { loginUser, registerUser ,}
