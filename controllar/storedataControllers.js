@@ -1,3 +1,4 @@
+import Order from "../models/orderModel.js";
 import StoreData from "../models/storedataModel.js"; // Mongoose model
 
  const createStore = async (req, res) => {
@@ -129,4 +130,42 @@ import StoreData from "../models/storedataModel.js"; // Mongoose model
     });
   }
 };
+
+
+// new data
+
+
+// Get store by phone or email
+export const getStore = async (req, res) => {
+  try {
+    const { phone, email } = req.query;
+
+    if (!phone && !email) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Provide phone or email" });
+    }
+
+    // Find store
+    const store = await StoreData.findOne(
+      phone ? { phone } : { email }
+    );
+
+    if (!store) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Store not found" });
+    }
+
+    res.status(200).json({ success: true, data: store });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ success: false, message: "Server error", error: err.message });
+  }
+};
+
+
+
 export {checkStoreUser,createStore,removeStore,getSingleStore,getAllStores};;

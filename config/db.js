@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+/*import mongoose from "mongoose";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -8,6 +8,9 @@ mongoose.connect(process.env.DB_URL,{
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 5000, // 5 sec timeout this block off code add 
   })
+    
+//mongoose.connect(process.env.DB_URI);
+
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('Connection error', err));
 
@@ -24,31 +27,32 @@ db.on('connection',(error) =>{
 })
 
 export default db;
-
-
-
-/*
+*/
 import mongoose from "mongoose";
-
 import dotenv from "dotenv";
+
 dotenv.config();
 
+mongoose
+  .connect(process.env.DB_URL, {
+    serverSelectionTimeoutMS: 5000, // ✅ 5 sec timeout
+  })
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => console.error("❌ MongoDB Connection error:", err));
 
-mongoose.connect(process.env.DB_URL)
-.then(() => console.log('Connected to MongoDB'))
-.catch(err => console.error('Connection error', err));
+const db = mongoose.connection;
 
-const dbm= mongoose.connection;
-
-db.on('connection',() =>{
-    console.log('connection to mongodb server');
+// ✅ Correct Events
+db.on("connected", () => {
+  console.log("🟢 MongoDB connected");
 });
-db.on('disconnection',() =>{
-    console.log('disconnection to mongodb server');
-});
-db.on('connection',(error) =>{
-    console.log('connection to mongodb server error:',error);
-})
 
-export default dbm;
-*/
+db.on("disconnected", () => {
+  console.log("🔴 MongoDB disconnected");
+});
+
+db.on("error", (error) => {
+  console.log("❌ MongoDB error:", error);
+});
+
+export default db;

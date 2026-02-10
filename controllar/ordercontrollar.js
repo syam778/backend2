@@ -10,6 +10,7 @@ import AssignedOrder from "../models/AssignedOrderModel.js";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 
+
 const verifyOrder = async (req, res) => { //old code
   const { orderId, success } = req.body;
   try {
@@ -986,6 +987,7 @@ export const placeOrderCOD = async (req, res) => {
       userId,
       items,
       amount,
+      
 
       address: {
         firstName,
@@ -1020,6 +1022,10 @@ export const placeOrderCOD = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
+
+
 
 
 

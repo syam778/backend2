@@ -15,7 +15,7 @@ import {
   getUserProfile,
   getMyOrderData,
   updateOrderStatus,
-  
+
   getOrderById,
   getAllDeliveryBoyTotals,
   markOrderDelivered,
@@ -24,8 +24,12 @@ import {
   getPaymentStatus,
   placeOrderCOD,
   
+  
+
+
 } from "../controllar/ordercontrollar.js";
 import { assignOrder } from "../controllar/AssignedOrderController.js";
+import StoreData from "../models/storedataModel.js";
 
 const orderRouter = express.Router();
 //new add
@@ -44,37 +48,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 
-
-/*orderRouter.post("/payment-pending", upload.single("paymentScreenshot"), async (req, res) => {
-  try {
-    const { orderData } = req.body;
-
-    if (!req.file) return res.status(400).json({ success: false, message: "No file uploaded" });
-    if (!orderData) return res.status(400).json({ success: false, message: "orderData missing" });
-
-    let parsedOrder;
-    try {
-      parsedOrder = JSON.parse(orderData);
-    } catch {
-      return res.status(400).json({ success: false, message: "Invalid orderData JSON" });
-    }
-
-    const newOrder = new Order({
-      ...parsedOrder,
-      status: "pending",                   // must match enum
-      paymentScreenshot: req.file.path,
-      payment: true,
-      paymentMethod: "offline",
-    });
-
-    await newOrder.save();
-
-    res.json({ success: true, message: "Payment uploaded & order saved", order: newOrder });
-  } catch (err) {
-    console.error("PAYMENT UPLOAD ERROR 👉", err);
-    res.status(500).json({ success: false, message: err.message || "Failed to upload payment" });
-  }
-});*
 orderRouter.post(
   "/payment-pending",
   authMiddleware,
@@ -93,55 +66,14 @@ orderRouter.post(
 
       const newOrder = new Order({
         userId: req.user.id,
-        items: parsedOrder.items,
-        amount: parsedOrder.amount,
+        // ✅ IMPORTANT: storeIdRef saved inside items
 
-        address: parsedOrder,
-
-        paymentStatus: "PENDING",
-        paymentScreenshot: req.file.filename,
-        paymentMethod: "offline",
-
-        payment: false,
-        status: "pending",
-      });
-
-      await newOrder.save();
-
-      res.json({
-        success: true,
-        message: "Payment uploaded & order saved",
-        order: newOrder,
-      });
-    } catch (err) {
-      console.error("PAYMENT UPLOAD ERROR 👉", err);
-      res.status(500).json({ success: false, message: err.message });
-    }
-  }
-);*/
-orderRouter.post(
-  "/payment-pending",
-  authMiddleware,
-  upload.single("paymentScreenshot"),
-  async (req, res) => {
-    try {
-      const { orderData } = req.body;
-
-      if (!req.file)
-        return res.status(400).json({ success: false, message: "No file uploaded" });
-
-      if (!orderData)
-        return res.status(400).json({ success: false, message: "orderData missing" });
-
-      const parsedOrder = JSON.parse(orderData);
-
-      const newOrder = new Order({
-        userId: req.user.id,
-         // ✅ IMPORTANT: storeIdRef saved inside items
-      
 
         items: parsedOrder.items,
         amount: parsedOrder.amount,
+        //add code
+        
+
 
         address: {
           firstName: parsedOrder.firstName,
@@ -238,7 +170,7 @@ orderRouter.post("/my-data", getMyOrderData);
 orderRouter.post("/my-order", getMyOrderData);
 orderRouter.get("/order/:id", getOrderById);
 orderRouter.get("/all-deliveryboy-totals", getAllDeliveryBoyTotals);
-orderRouter.post("/assign",assignOrder)
+orderRouter.post("/assign", assignOrder)
 orderRouter.put("/deliver/:orderId", markOrderDelivered);
 //orderRouter.get("/store/:storeId", listOrdersForStore);
 
@@ -249,6 +181,10 @@ orderRouter.put("/orders/:id/status", async (req, res) => {
 
   res.json({ success: true });
 });
+ // create storeModel
+
+
+
 
 export default orderRouter;
 

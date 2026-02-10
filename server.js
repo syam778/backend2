@@ -113,6 +113,9 @@ app.use("/api/homestore",StoreRouter)
 
 
 
+/*server.listen(PORT, () => { //just chenge server
+  console.log(`Server is running on http://localhost:${PORT}`);
+});*/
 server.listen(PORT, () => { //just chenge server
   console.log(`Server is running on http://localhost:${PORT}`);
 });
