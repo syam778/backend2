@@ -1,13 +1,12 @@
 
+import Logicstore from "../models/logicstoreModel.js";
 import StoreData from "../models/storedataModel.js";
-import StoreVerify from "../models/storeVerifyModel.js";
-//import StoreVerify from "../models/storeVerifyModel.js";
-
+//import Logicstore from "../models/logicstoreModel.js";
 
 // ✅ GET ALL
 export const getAllStoreInfo = async (req, res) => {
   try {
-    const data = await StoreVerify.find().sort({ createdAt: -1 });
+    const data = await Logicstore.find().sort({ createdAt: -1 });
 
     res.json({
       success: true,
@@ -27,7 +26,7 @@ export const deleteStoreInfo = async (req, res) => {
   try {
     const id = req.params.id;
 
-    await StoreVerify.findByIdAndDelete(id);
+    await Logicstore.findByIdAndDelete(id);
 
     res.json({
       success: true,
@@ -67,7 +66,7 @@ export const verifyStore = async (req, res) => {
 
     /* ================= STORE VERIFY RECORD ================= */
     if (!store) {
-      const failedVerify = await StoreVerify.create({
+      const failedVerify = await Logicstore.create({
         username,
         storeId,
         gmail,
@@ -86,7 +85,7 @@ export const verifyStore = async (req, res) => {
     }
 
     /* ================= SUCCESS ================= */
-    const verifiedStore = await StoreVerify.create({
+    const verifiedStore = await Logicstore.create({
       username,
       storeId,
       gmail,
@@ -126,7 +125,7 @@ export const quickVerifyStore = async (req, res) => {
     }
 
     // Check if store already verified
-    const verifiedStore = await StoreVerify.findOne({
+    const verifiedStore = await Logicstore.findOne({
       username: username.trim(),
       storeId: storeId.trim(),
       gmail: gmail.trim().toLowerCase(),
@@ -158,7 +157,7 @@ export const quickVerifyStore = async (req, res) => {
     }
 
     // Create a verified record automatically (optional)
-    const newVerify = await StoreVerify.create({
+    const newVerify = await Logicstore.create({
       username: store.username,
       storeId: store.storeId,
       gmail: store.gmail,

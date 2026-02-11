@@ -1,6 +1,4 @@
-//import Deliver from "../models/Deliver.js";
 
-//import Deliver from "../models/deliverModel";
 import Deliver from "../models/deliverModel.js"; // ✅
 
 
@@ -90,22 +88,7 @@ export const removeDeliver = async (req, res) => {
   }
 };
 
-/* 📄 Get All Delivery Boys *
-export const getAllDeliver = async (req, res) => {
-  try {
-    const delivers = await Deliver.find().sort({ createdAt: -1 });
 
-    res.json({
-      success: true,
-      data: delivers
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Server error"
-    });
-  }
-};*/
 export const getAllDeliver = async (req, res) => {
   try {
     const delivers = await Deliver.find().sort({ createdAt: -1 });
@@ -114,64 +97,6 @@ export const getAllDeliver = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
-
-/* 🟢 Set Delivery Boy Online 
-export const deliverOnline = async (req, res) => {
-  try {
-    const { id } = req.body;
-
-    await Deliver.findByIdAndUpdate(id, {
-      isOnline: true,
-      lastSeen: new Date()
-    });
-
-    res.json({ success: true, message: "Delivery boy is online" });
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Server error" });
-  }
-};
-*/
-
-// deliveryController.js
-/*export const deliverOnline = async (req, res) => {
-  const { userSpecialId } = req.body;
-
-  const delivery = await Deliver.findOneAndUpdate(
-    { userSpecialId },
-    { isActive: true },
-    { new: true }
-  );
-
-  // 🔥 AUTO CREATE DELBOY
-  await createDelBoys(
-    { body: { 
-        userSpecialId,
-        number: delivery.number,
-        gmail: delivery.gmail,
-        vehicle: delivery.vehicle
-    }},
-    { json: () => {} }
-  );
-
-  res.json({ success: true, message: "Delivery is now online" });
-};
-
-/* Set Delivery Boy Offline 
-export const deliverOffline = async (req, res) => {
-  try {
-    const { id } = req.body;
-
-    await Deliver.findByIdAndUpdate(id, {
-      isOnline: false
-    });
-
-    res.json({ success: true, message: "Delivery boy is offline" });
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Server error" });
-  }
-};
-
-*/
 
 
 
@@ -259,29 +184,7 @@ export const getOnlineDeliveryBoys = async (req, res) => {
     res.status(500).json({ success: false });
   }
 };
-/*export const setOnline = async (req, res) => {
-  const { deliveryBoyId } = req.body;
 
-  await Deliver.findByIdAndUpdate(deliveryBoyId, {
-    isOnline: true
-  });
-
-  res.json({ success: true });
-};
-export const setOffline = async (req, res) => {
-  const { deliveryBoyId } = req.body;
-
-  await Deliver.findByIdAndUpdate(deliveryBoyId, {
-    isOnline: false
-  });
-
-  res.json({ success: true });
-};*/
-// delBoyController.js
-
-/* =========================
-   SET ONLINE
-========================= */
 export const setOnline = async (req, res) => {
   try {
     await Deliver.findByIdAndUpdate(req.body.id, {

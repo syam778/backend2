@@ -26,8 +26,9 @@ import deliverRouter from "./routes/deliverRoute.js";
 import adminRouter from "./routes/adminRoute.js";
 import delBoyRouter from "./routes/delBoyRoutes.js";
 import assignRouter from "./routes/assignedOrderRoutes.js";
-import StoreVerifyRouter from "./routes/storeVerifyRoute.js";
+//import StoreVerifyRouter from "./routes/logicstoreRoute.js";
 import StoreRouter from "./routes/storedataRoute.js";
+import LogicstoreRouter from "./routes/logicstoreRoute.js";
 
 
 
@@ -107,7 +108,7 @@ app.use("/api/delivery",deliverRouter)
 app.use("/api/admin",adminRouter)
 app.use("/api/delboy",delBoyRouter)
 app.use("/api/assignorder",assignRouter)
-app.use("/api/store",StoreVerifyRouter)
+app.use("/api/store",LogicstoreRouter)
 app.use("/api/homestore",StoreRouter)
 //app.use("/api/payment",PaymentRouter);
 

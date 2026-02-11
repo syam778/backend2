@@ -43,19 +43,7 @@ const removeFormCard = async (req,res) => {
     }
 
 }
-//fetch user card data
-/*const getCard = async (req,res) => {
-    try {
-        let userData = await userModel.findById(req.body.userId);
-        let cardData = await userData.cardData;
-        res.json({success:true,cardData})
-    } catch (error) {
-        console.log(error);
-        res.json({success:false,message:"Error"})
-        
-    }
 
-}*/
  const getCard = async (req, res) => {
   try {
     const card = await userModel.findOne({ userId: req.user.id }); // or whatever query you use
@@ -122,5 +110,3 @@ export const getCartData = async (req, res) => {
 export { addToCard, removeFormCard, getCard };
 
 
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ODAxOGQ0ODgzN2FkNDViM2QwZjkyYyIsImlhdCI6MTczNjY5NjI1NH0.v0jOqkD5YHUitkpmqsRUGYaVKrB3bALqSA6ANUWgHDo
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ODNmMzFiZjBmMjE5NmJiNTZjNjIzNyIsImlhdCI6MTczNjcwMDY5OX0.L_ulOMHuxusQEpLR5w_iVqIVtedJ5XGkL_1PNSZY8xg

@@ -1,39 +1,6 @@
 import Payment from "../models/paymentModel.js";
 
 
-// ✅ CREATE PAYMEN
-
-/*export const createPayment = async (req, res) => {
-  try {
-    const { orderId, amount } = req.body;
-
-    if (!orderId || !amount || amount <= 0) {
-      return res.status(400).json({ success: false, message: "Invalid orderId or amount" });
-    }
-
-    const paymentId = "PAY_" + Date.now(); // unique id
-
-    const payment = await Payment.create({
-      paymentId,
-      orderId,
-      amount,
-      status: "CREATED",
-    });
-
-    return res.status(201).json({
-      success: true,
-      message: "Payment created successfully",
-      payment,
-    });
-  } catch (error) {
-    console.error("CreatePayment error:", error);
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Server error during payment creation",
-    });
-  }
-};*/
-
 
 const UPI_ID = "beherasyam28-2@oksbi"; // your UPI
 

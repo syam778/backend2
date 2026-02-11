@@ -97,54 +97,7 @@ export const getMyOrdersForDelBoy = async (req, res) => {
   res.json({ success: true, data: orders });
 };
 
-/*
-export const assignOrder = async (req, res) => {
-  try {
-    const { orderId, deliveryBoyId } = req.body;
 
-    if (!orderId || !deliveryBoyId) {
-      return res.status(400).json({
-        success: false,
-        message: "orderId and deliveryBoyId required",
-      });
-    }
-
-    const order = await Order.findById(orderId);
-    if (!order) {
-      return res.status(404).json({ success: false, message: "Order not found" });
-    }
-
-    const delBoy = await DelBoy.findById(deliveryBoyId);
-    if (!delBoy) {
-      return res.status(404).json({ success: false, message: "Delivery boy not found" });
-    }
-
-    // prevent duplicate assignment
-    const exists = await AssignedOrder.findOne({ order: orderId });
-    if (exists) {
-      return res.status(400).json({
-        success: false,
-        message: "Order already assigned",
-      });
-    }
-
-    const assignedOrder = await AssignedOrder.create({
-      order: order._id,
-      deliveryBoyId: delBoy._id, // ✅ FIXED
-      status: "assigned",
-    });
-
-    order.status = "assigned";
-    order.assignedTo = delBoy._id;
-    await order.save();
-
-    res.json({ success: true, data: assignedOrder });
-  } catch (err) {
-    console.error("ASSIGN ORDER ERROR 👉", err);
-    res.status(500).json({ success: false, message: err.message });
-  }
-};
-*/
 // this code main code
 export const assignOrder = async (req, res) => {
   try {
@@ -183,73 +136,6 @@ export const assignOrder = async (req, res) => {
 };
 
 
-/*export const assignOrder = async (req, res) => {
-  try {
-    const { orderId, deliveryBoyId } = req.body;
-
-    if (!orderId || !deliveryBoyId) {
-      return res.status(400).json({
-        success: false,
-        message: "orderId and deliveryBoyId required",
-      });
-    }
-
-    const order = await Order.findById(orderId);
-    if (!order) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found",
-      });
-    }
-
-    const delBoy = await DelBoy.findById(deliveryBoyId);
-    if (!delBoy) {
-      return res.status(404).json({
-        success: false,
-        message: "Delivery boy not found",
-      });
-    }
-
-    // ❌ Prevent duplicate assignment
-    const exists = await AssignedOrder.findOne({ order: orderId });
-    if (exists) {
-      return res.status(400).json({
-        success: false,
-        message: "Order already assigned",
-      });
-    }
-
-    // ✅ Create assigned-order record
-    const assignedOrder = await AssignedOrder.create({
-      order: order._id,
-      deliveryBoyId: delBoy._id,
-      status: "assigned",
-    });
-  
-    // ✅ UPDATE MAIN ORDER (THIS IS IMPORTANT)
-    order.status = "assigned";
-    order.assignedTo = delBoy._id;
-    order.assignedAt = new Date(); // 🔥 THIS LINE (your question)
-    await order.save();
-   
-
-    // ✅ Populate so frontend gets name & phone immediately
-    const populatedOrder = await Order.findById(order._id)
-      .populate("assignedTo", "name number");
-
-    res.json({
-      success: true,
-      assignedOrder,
-      order: populatedOrder,
-    });
-  } catch (err) {
-    console.error("ASSIGN ORDER ERROR 👉", err);
-    res.status(500).json({
-      success: false,
-      message: err.message,
-    });
-  }
-};*/
 
 
 export const cancelOrder = async (req, res) => {
