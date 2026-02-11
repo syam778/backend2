@@ -13,7 +13,4 @@ userRouter.get("/all", getAllUsers);
 userRouter.delete("/delete/:id", deleteUser);
 
 
-
-
-
 export default userRouter;
