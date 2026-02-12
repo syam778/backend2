@@ -222,7 +222,7 @@ const allowedOrigins = [
   "https://store-add.netlify.app",
 ];
 
-// ✅ Express CORS (BEST) https://admin-pop.netlify.app/  https://delivery-pop.netlify.app/ https://store-pop.netlify.app/ https://user-pop.netlify.app/
+// ✅ Express CORS (BEST) 
 app.use(
   cors({
     origin: function (origin, callback) {
