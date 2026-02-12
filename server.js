@@ -179,7 +179,7 @@ const PORT = process.env.PORT || 3000;
 
 
 
-// ✅ Allowed origins
+/*// ✅ Allowed origins
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
@@ -197,8 +197,32 @@ const allowedOrigins = [
   "https://www.user-ad.netlify.app",
   "https://www.store-add.netlify.app",
 ];
+*/
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5175",
+  "http://localhost:5176",
+  "http://localhost:5177",
 
-// ✅ Express CORS (BEST)
+  // ✅ Netlify (POP)
+  "https://admin-pop.netlify.app",
+  "https://delivery-pop.netlify.app",
+  "https://store-pop.netlify.app",
+  "https://user-pop.netlify.app",
+
+  // ✅ Old Netlify (if still used)
+  "https://admin-ad.netlify.app",
+  "https://admin-addd.netlify.app",
+  "https://store-ad.netlify.app",
+
+  "https://admin-add.netlify.app",
+  "https://deliver-add.netlify.app",
+  "https://user-ad.netlify.app",
+  "https://store-add.netlify.app",
+];
+
+// ✅ Express CORS (BEST) https://admin-pop.netlify.app/  https://delivery-pop.netlify.app/ https://store-pop.netlify.app/ https://user-pop.netlify.app/
 app.use(
   cors({
     origin: function (origin, callback) {
