@@ -29,8 +29,9 @@ const verifyOrder = async (req, res) => { //old code
   }
 
 }
-const placeOrder = async (req, res) => { //old and veryimportant code
-  const frontend_url = "http://localhost:5175/";
+const placeOrder = async (req, res) => { //old and veryimportant code"https://user-ad.netlify.app/"
+  //const frontend_url = "http://localhost:5175/";
+  const frontend_url = "https://user-ad.netlify.app/";
 
   try {
     // 🔐 Get userId from token middleware
@@ -1025,7 +1026,26 @@ export const placeOrderCOD = async (req, res) => {
 
 
 
+export const getOrdersByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params;
 
+    const orders = await Order
+      .find({ userId })
+      .sort({ date: -1 }); // latest first
+
+    return res.json({
+      success: true,
+      count: orders.length,
+      data: orders,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
 
 
 

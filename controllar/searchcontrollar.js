@@ -2,7 +2,7 @@ import searchModel from "../models/searchModel.js";
 import express from "express"
 
 const searchAdd = async (req,res) => {
-    const frontend_url = "http://localhost:5173/";
+    const frontend_url = "https://admin-add.netlify.app/"; //admin url
 
     let image_filename = `${req.file.filename}`;
 

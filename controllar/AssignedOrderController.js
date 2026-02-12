@@ -288,6 +288,27 @@ export const getSingleOrder = async (req, res) => {
   }
 };*/
 
+
+export const getAllAssignedOrders = async (req, res) => {
+  try {
+    const data = await AssignedOrder
+      .find()
+      .populate("deliveryBoyId") // ✅ this will return full delivery boy data
+      .sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
+
 export const getDelBoyOrderHistory = async (req, res) => {
   try {
     const { delBoyId } = req.params;

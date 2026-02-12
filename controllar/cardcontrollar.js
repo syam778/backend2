@@ -4,7 +4,8 @@ import express from "express"
 //add item to user card
 
 const addToCard = async (req,res) => {
-    const frontend_url = "http://localhost:5173/";
+    //const frontend_url = "http://localhost:5173/";
+    const frontend_url = "https://admin-add.netlify.app/"
     try {
         let userData = await userModel.findById(req.body.userId);
         let cardData = await userData.cardData;

@@ -23,6 +23,7 @@ import {
   updatePaymentStatus,
   getPaymentStatus,
   placeOrderCOD,
+  getOrdersByUserId,
   
   
 
@@ -184,7 +185,7 @@ orderRouter.put("/orders/:id/status", async (req, res) => {
  // create storeModel
 
 
-
+orderRouter.get("/history/:userId", getOrdersByUserId);
 
 export default orderRouter;
 

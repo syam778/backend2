@@ -10,6 +10,7 @@ import {
   getAllDeliveryInfo,
   deleteDeliveryInfo,
   getLatLngFromLink,
+  getAllAssignedOrders,
 } from "../controllar/AssignedOrderController.js";
 import Order from "../models/orderModel.js";
 
@@ -40,5 +41,6 @@ assignRouter.get("/all", getAllDeliveryInfo);
 assignRouter.delete("/delete/:id", deleteDeliveryInfo);
 //map
 assignRouter.post("/extract", getLatLngFromLink);
+assignRouter.get("/all", getAllAssignedOrders);
 export default assignRouter;
 
