@@ -1,26 +1,4 @@
-/*import { url } from "inspector/promises";
-import mongoose from "mongoose";
-import { type } from "os";
 
-
-const foodSchema = new mongoose.Schema({
-    name:{type:String,require:true},
-    price:{type:Number,require:true},
-    description:{type:String,require:true},
-    image:{type:String,require:true},
-    category:{type:String,require:true},
-    firstName:{type:String,require:true},
-    phone:{type:Number,require:true},
-    street:{type:String,require:true},
-    city:{type:String,require:true},
-    linkdata:{type:String,require:true},
-   storeIdRef: { type: mongoose.Schema.Types.ObjectId, ref: "storedata", required: true },
-},
- { timestamps: true })
-const foodModel = mongoose.models.food || mongoose.model("food",foodSchema);
-
-export default foodModel;
-*/
 
 
 import mongoose from "mongoose";
@@ -37,13 +15,18 @@ const foodSchema = new mongoose.Schema(
     phone: { type: Number, required: true },
     street: { type: String, required: true },
     city: { type: String, required: true },
-    linkdata: { type: String, required: true,},
+    linkdata: { type: String, required: true, },
     /*address: {
       linkdata: { type: String, required: true },
 
       lat: { type: Number, default: null },
       lng: { type: Number, default: null },
     },*/
+    itemSize: {
+      unit: { type: String, enum: ["gm", "kg", "ml", "ltr", "pcs"], default: "gm" },
+      size: { type: Number, default: 1 }
+    },
+
 
 
     // 🏪 Store ID (required only for store)
@@ -78,3 +61,4 @@ const foodSchema = new mongoose.Schema(
 const foodModel = mongoose.models.food || mongoose.model("food", foodSchema);
 
 export default foodModel;
+

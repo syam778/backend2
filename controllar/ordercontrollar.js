@@ -9,6 +9,63 @@ import mongoose from "mongoose";
 import AssignedOrder from "../models/AssignedOrderModel.js";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
+import StoreData from "../models/storedataModel.js"; // your store model
+
+export const getMyOrderDataFull = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.json({ success: false, message: "Email required" });
+    }
+
+    // ✅ 1) Get orders + populate delivery boy
+    let orders = await Order.find({ "address.email": email })
+      .sort({ createdAt: -1 })
+      .populate("assignedTo", "name number userSpecialId isOnline");
+
+    if (!orders.length) {
+      return res.json({
+        success: false,
+        message: "No orders found for this email",
+      });
+    }
+
+    // ✅ 2) Add store details from items[0].storeIdRef or storeId
+    const finalOrders = await Promise.all(
+      orders.map(async (order) => {
+        const storeId =
+          order.items?.[0]?.storeIdRef || order.items?.[0]?.storeId;
+
+        let storeData = null;
+
+        if (storeId) {
+          storeData = await StoreData.findById(storeId);
+          
+        }
+
+        return {
+          ...order._doc,
+          storeData,
+        };
+      })
+    );
+
+    return res.json({
+      success: true,
+      data: finalOrders,
+    });
+  } catch (error) {
+    console.log("getMyOrderDataFull ERROR 👉", error);
+    return res.json({
+      success: false,
+      message: "Error fetching user data",
+    });
+  }
+};
+
+
+
 
 
 const verifyOrder = async (req, res) => { //old code
@@ -31,7 +88,7 @@ const verifyOrder = async (req, res) => { //old code
 }
 const placeOrder = async (req, res) => { //old and veryimportant code"https://user-ad.netlify.app/"
   //const frontend_url = "http://localhost:5175/";
-  const frontend_url = "https://user-ad.netlify.app/";
+  const frontend_url = "https://user-pop.netlify.app";
 
   try {
     // 🔐 Get userId from token middleware
@@ -113,13 +170,13 @@ const placeOrder = async (req, res) => { //old and veryimportant code"https://us
     });
   }
 };
- 
+
 /*const razorpay = new Razorpay({
     key_id:"rzp_test_qR05WbFxZAAsek" , // Your Razorpay key_id
     key_secret: process.env.RAZORPAY_KEY_SECRET // Your Razorpay key_secret
   });
   */
- 
+
 
 
 
@@ -622,11 +679,11 @@ export const getOrderById = async (req, res) => {
 };
 
 
- const listOrders = async (req, res) => {
+const listOrders = async (req, res) => {
   try {
     const orders = await Order.find()
-    .populate("assignedTo", "name number userSpecialId")
-    .sort({ createdAt: -1 });
+      .populate("assignedTo", "name number userSpecialId")
+      .sort({ createdAt: -1 });
 
     res.json({
       success: true,          // 🔥 REQUIRED
@@ -988,7 +1045,7 @@ export const placeOrderCOD = async (req, res) => {
       userId,
       items,
       amount,
-      
+
 
       address: {
         firstName,

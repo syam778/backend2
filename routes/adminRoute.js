@@ -9,7 +9,13 @@ adminRouter.post("/create", createAdmin);
 adminRouter.get("/get", getAdmin);
 adminRouter.delete("/remove/:id", removeAdmin);
 
-
+adminRouter.get("/support", (req, res) => {
+  res.json({
+    success: true,
+    phone: process.env.SUPPORT_PHONE,
+    email: process.env.SUPPORT_EMAIL,
+  });
+});
 export default adminRouter;
 /*
 const adminRouter = express.Router();

@@ -216,10 +216,10 @@ const allowedOrigins = [
   "https://admin-addd.netlify.app",
   "https://store-ad.netlify.app",
 
-  "https://admin-add.netlify.app",
-  "https://deliver-add.netlify.app",
-  "https://user-ad.netlify.app",
-  "https://store-add.netlify.app",
+   "https://admin-mop.netlify.app",
+  "https://delivery-mop.netlify.app",
+  "https://store-mop.netlify.app",
+  "https://user-mop.netlify.app",
 ];
 
 // ✅ Express CORS (BEST) 
@@ -239,9 +239,14 @@ app.use(
 
 app.use(express.json());
 
-// ✅ Static
+// ✅ Static localhost
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.use("/images", express.static(path.join(process.cwd(), "uploads")));
+//live host 
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+app.use("/images", express.static(path.join(process.cwd(), "uploads/payments")));
+
+
 
 // ✅ Routes
 app.use("/api/food", foodRouter);

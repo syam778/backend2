@@ -24,8 +24,14 @@ export const addFood = async (req, res) => {
       phone,
       street,
       city,
-      linkdata
+      linkdata,
+      itemSize,
     } = req.body;
+    //add code
+    let parsedItemSize = itemSize;
+    if (typeof itemSize === "string") {
+      parsedItemSize = JSON.parse(itemSize);
+    }
 
     // 🔒 Validate role logic
     if (!createdBy || !["store", "admin"].includes(createdBy)) {
@@ -52,6 +58,7 @@ export const addFood = async (req, res) => {
     // ✅ Create food
     const food = await foodModel.create({
       name,
+      itemSize,
       price,
       description,
       category,

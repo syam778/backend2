@@ -24,6 +24,7 @@ import {
   getPaymentStatus,
   placeOrderCOD,
   getOrdersByUserId,
+  getMyOrderDataFull,
   
   
 
@@ -186,6 +187,8 @@ orderRouter.put("/orders/:id/status", async (req, res) => {
 
 
 orderRouter.get("/history/:userId", getOrdersByUserId);
+orderRouter.post("/my-fullorder", getMyOrderDataFull);
+
 
 export default orderRouter;
 

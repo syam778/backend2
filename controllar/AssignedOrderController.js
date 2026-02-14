@@ -4,6 +4,150 @@ import Order from "../models/orderModel.js";
 import DelBoy from "../models/delBoyModel.js";
 import AssignedOrder from "../models/AssignedOrderModel.js";
 import { io } from "../server.js"; // adjust path if needed
+
+
+
+
+
+
+
+
+
+const haversineDistanceKm = (lat1, lon1, lat2, lon2) => {
+  const toRad = (v) => (v * Math.PI) / 180;
+  const R = 6371;
+
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) *
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) ** 2;
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+};
+const calculateDeliveryCharge = (distanceKm, itemSizeUnit, itemSizeValue) => {
+  let charge = 10;
+
+  // ✅ Distance rule
+  if (distanceKm > 2) {
+    const extraKm = Math.ceil(distanceKm - 2);
+    charge += extraKm * 8;
+  }
+
+  // ✅ Item size rule
+  if (itemSizeUnit === "pcs") {
+    if (itemSizeValue > 5) {
+      charge += (itemSizeValue - 5) * 5;
+    }
+  }
+
+  if (itemSizeUnit === "kg") {
+    if (itemSizeValue > 5) {
+      charge += Math.ceil((itemSizeValue - 5) / 5) * 5;
+    }
+  }
+
+  return charge;
+};
+/*export const assignOrder = async (req, res) => {
+  try {
+    const { orderId, deliveryBoyId, linkdata } = req.body;
+
+    if (!orderId || !deliveryBoyId || !linkdata) {
+      return res.status(400).json({
+        success: false,
+        message: "orderId, deliveryBoyId, storeLinkdata required",
+      });
+    }
+
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({ success: false, message: "Order not found" });
+    }
+
+    const delBoy = await DelBoy.findById(deliveryBoyId);
+    if (!delBoy) {
+      return res.status(404).json({ success: false, message: "Delivery boy not found" });
+    }
+
+    // prevent duplicate assignment
+    const exists = await AssignedOrder.findOne({ order: orderId });
+    if (exists) {
+      return res.status(400).json({ success: false, message: "Order already assigned" });
+    }
+
+    // ✅ user linkdata from order
+    const userLatLng = extractLatLng(order.linkdata);
+    if (!userLatLng) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid USER Google map link",
+      });
+    }
+
+    // ✅ store linkdata from req.body
+    const storeLatLng = extractLatLng(linkdata);
+    if (!storeLatLng) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid STORE Google map link",
+      });
+    }
+
+    // ✅ distance
+    const distanceKm = haversineDistanceKm(
+      storeLatLng.lat,
+      storeLatLng.lng,
+      userLatLng.lat,
+      userLatLng.lng
+    );
+
+    // ✅ itemSize from first item
+    const firstItem = order.items?.[0];
+    const unit = firstItem?.itemSize?.unit || "pcs";
+    const size = Number(firstItem?.itemSize?.size || 0);
+
+    // ✅ delivery charge
+    const deliveryCharge = calculateDeliveryCharge(distanceKm, unit, size);
+
+    // ✅ Create assigned order (ONLY basic)
+    const assignedOrder = await AssignedOrder.create({
+      order: order._id,
+      deliveryBoyId: delBoy._id,
+      status: "assigned",
+      deliveryCharge,
+      distanceKm: Number(distanceKm.toFixed(2)),
+    });
+
+    // update main order
+    order.status = "assigned";
+    order.assignedTo = delBoy._id;
+    order.deliveryCharge = deliveryCharge;
+    order.distanceKm = Number(distanceKm.toFixed(2));
+    await order.save();
+
+    return res.json({
+      success: true,
+      message: "Order assigned with delivery charge",
+      data: assignedOrder,
+      distanceKm: Number(distanceKm.toFixed(2)),
+      deliveryCharge,
+    });
+  } catch (err) {
+    console.error("ASSIGN ORDER ERROR 👉", err);
+    return res.status(500).json({ success: false, message: err.message });
+  }
+};*/
+
+
+
+
+
+
 export const extractLatLng = (url) => {
   if (!url) return null;
 
@@ -27,6 +171,25 @@ export const extractLatLng = (url) => {
 
   return null;
 };
+export const getDelBoyHistory = async (req, res) => {
+  try {
+    const { delBoyId } = req.params;
+
+    const history = await AssignedOrder.find({ deliveryBoyId: delBoyId })
+      .sort({ createdAt: -1 })
+      .populate("order") // 🔥 brings full order details
+      .populate("deliveryBoyId", "name userSpecialId");
+
+    return res.json({
+      success: true,
+      data: history
+    });
+  } catch (error) {
+    console.log("HISTORY ERROR:", error);
+    res.json({ success: false, message: "Server error" });
+  }
+};
+
 
 
 export const getLatLngFromLink = async (req, res) => {
@@ -99,7 +262,7 @@ export const getMyOrdersForDelBoy = async (req, res) => {
 
 
 // this code main code
-export const assignOrder = async (req, res) => {
+export const assignOrder = async (req, res) => { //main code
   try {
     const { orderId, deliveryBoyId } = req.body;
 
