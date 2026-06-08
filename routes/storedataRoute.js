@@ -1,5 +1,5 @@
 import express from "express";
-import { checkStoreUser, createStore, getAllStores, getSingleStore, getStore, removeStore, } from "../controllar/storedataControllers.js";
+import { checkStoreUser, createStore, getAllStores, getSingleStore, getStore, removeStore,verifyUser } from "../controllar/storedataControllers.js";
 
 
 
@@ -12,6 +12,7 @@ StoreRouter.delete("/remove/:id", removeStore);
 StoreRouter.post("/check", checkStoreUser);
 //StoreRouter.post("/login", storeLogin);
 StoreRouter.get("/", getStore);
+StoreRouter.post("/verify", verifyUser);
 
 export default StoreRouter;
 

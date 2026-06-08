@@ -3,7 +3,109 @@ import foodModel from "../models/foodModel.js"; //this code all right 1st
 import fs from "fs";
 import StoreData from "../models/storedataModel.js"; // assuming you have a store model
 
+
+
+
 export const addFood = async (req, res) => {
+  try {
+    // Image validation
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "Product image is required",
+      });
+    }
+
+    const {
+      createdBy,
+      storeIdRef,
+      name,
+      price,
+      description,
+      category,
+      firstName,
+      phone,
+      street,
+      city,
+      linkdata,
+      itemSize,
+    } = req.body;
+
+    // Parse itemSize
+    let parsedItemSize = itemSize;
+
+    if (typeof itemSize === "string") {
+      try {
+        parsedItemSize = JSON.parse(itemSize);
+      } catch (err) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid itemSize format",
+        });
+      }
+    }
+
+    // Validation
+    if (!createdBy || !["store", "admin"].includes(createdBy)) {
+      return res.status(400).json({
+        success: false,
+        message: "createdBy must be 'store' or 'admin'",
+      });
+    }
+
+    if (createdBy === "store" && !storeIdRef) {
+      return res.status(400).json({
+        success: false,
+        message: "Store must provide storeIdRef",
+      });
+    }
+
+    if (createdBy === "admin" && storeIdRef) {
+      return res.status(400).json({
+        success: false,
+        message: "Admin cannot provide storeIdRef",
+      });
+    }
+
+    // Cloudinary image URL
+    const imageUrl = req.file.path;
+
+    // Create food item
+    const food = await foodModel.create({
+      name,
+      itemSize: parsedItemSize,
+      price: Number(price),
+      description,
+      category,
+
+      image: imageUrl,
+
+      firstName,
+      phone,
+      street,
+      city,
+      linkdata,
+
+      createdBy,
+      storeIdRef: createdBy === "store" ? storeIdRef : null,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Food added successfully ✅",
+      data: food,
+    });
+  } catch (error) {
+    console.error("FOOD CREATE ERROR:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+/*export const addFood = async (req, res) => {
   try {
     // File validation
     if (!req.file) {
@@ -86,7 +188,7 @@ export const addFood = async (req, res) => {
     });
   }
 };
-
+*/
 export const listFood = async (req, res) => {
   try {
     const { userRole, storeId } = req.query; // frontend must send role + storeId

@@ -1,10 +1,11 @@
 import express from "express";
-import { activateDeliver, createDeliver, deliverOffline, deliverOnline, getAllDeliver, getOnlineDeliveryBoys, removeDeliver, setOffline, setOnline } from "../controllar/deliverController.js";
+import { activateDeliver, createDeliver, deliverOffline, deliverOnline, getAllDeliver, getOnlineDeliveryBoys, removeDeliver, setOffline, setOnline, verifyUser,  } from "../controllar/deliverController.js";
 
 
 const deliverRouter = express.Router();
 
 deliverRouter.post("/create",createDeliver );
+deliverRouter.post("/verify",verifyUser); //not working
 deliverRouter.get("/get", getAllDeliver);
 deliverRouter.post("/online", deliverOnline);
 deliverRouter.post("/offline", deliverOffline);

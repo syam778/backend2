@@ -95,7 +95,7 @@ export const createUser = async (req, res) => {
 };
 
 
-export const userProfile = async (req, res) => {
+/*export const userProfile = async (req, res) => {
   try {
     const { email, phone } = req.body;
 
@@ -107,7 +107,7 @@ export const userProfile = async (req, res) => {
     }
 
     // Find user
-    const user = await inputModel.findOne({
+    const user = await DelBoy.findOne({
       email: email.trim().toLowerCase(),
       phone: phone.trim()
     });
@@ -130,6 +130,49 @@ export const userProfile = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Server error",
+    });
+  }
+};*/
+
+export const userProfile = async (req, res) => {
+  try {
+    let { email, phone } = req.body;
+
+    if (!email || !phone) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and phone are required",
+      });
+    }
+
+    email = email.trim().toLowerCase();
+    phone = phone.trim();
+
+    const user = await inputModel.findOne({
+      gmail: email,
+      number: phone,
+    });
+
+    console.log("Found User:", user);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "User found",
+      data: user,
+    });
+  } catch (error) {
+    console.error("User Profile Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
     });
   }
 };
@@ -216,4 +259,3 @@ export const createDelProfileUser = async (req, res) => {
     });
   }
 };
-

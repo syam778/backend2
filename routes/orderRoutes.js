@@ -25,6 +25,8 @@ import {
   placeOrderCOD,
   getOrdersByUserId,
   getMyOrderDataFull,
+   
+  
   
   
 
@@ -113,7 +115,7 @@ orderRouter.post(
   }
 );
 //singel store data
-orderRouter.get("/store/:storeId", async (req, res) => {
+/*orderRouter.get("/store/:storeId", async (req, res) => {
   const { storeId } = req.params;
 
   try {
@@ -129,7 +131,46 @@ orderRouter.get("/store/:storeId", async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
+*/
+orderRouter.get("/store/:storeId", async (req, res) => {
+  try {
+    const { storeId } = req.params;
 
+    const orders = await Order.find({
+      "items.storeId": storeId,
+    }).sort({ createdAt: -1 });
+
+    if (!orders.length) {
+      return res.status(404).json({
+        success: false,
+        message: "No orders found",
+      });
+    }
+
+    const filteredOrders = orders.map((order) => {
+      const storeItems = order.items.filter(
+        (item) => item.storeId === storeId
+      );
+
+      return {
+        ...order.toObject(),
+        items: storeItems,
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      data: filteredOrders,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+});
 orderRouter.get("/generate-qr/:orderId", authMiddleware, async (req, res) => {
   try {
     const orderId = req.params.orderId;
@@ -188,6 +229,14 @@ orderRouter.put("/orders/:id/status", async (req, res) => {
 
 orderRouter.get("/history/:userId", getOrdersByUserId);
 orderRouter.post("/my-fullorder", getMyOrderDataFull);
+
+
+
+
+
+
+
+
 
 
 export default orderRouter;

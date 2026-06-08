@@ -5,18 +5,177 @@ import { io } from "../server.js";
 
 
 
-// ✅ GET ALL DELIVERY BOYS
-export const getAllDeliveryBoys = async (req, res) => {
-  try {
-    const data = await DelBoy.find().sort({ createdAt: -1 });
 
-    res.json({
+/*export const verifyUser = async (req, res) => {
+  try {
+    let { email, phone, storeName } = req.body;
+
+    console.log("REQ BODY:", req.body);
+
+    if (!email || !phone || !storeName) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
+
+    email = email.trim().toLowerCase();
+    phone = phone.trim();
+    storeName = storeName.trim();
+
+    const delBoy = await Deliver.findOne({
+      gmail: email,
+      userSpecialId: storeName,
+    });
+
+    console.log("FOUND:", delBoy);
+
+    if (!delBoy) {
+      return res.status(404).json({
+        success: false,
+        message: "Delivery Boy not found",
+      });
+    }
+
+    if (String(delBoy.number) !== String(phone)) {
+      return res.status(400).json({
+        success: false,
+        message: "Phone number does not match",
+      });
+    }
+
+    return res.status(200).json({
       success: true,
-      data,
-      total: data.length,
+      message: "Delivery Boy verified successfully",
+      userId: delBoy._id,
+      data: delBoy,
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};*/
+
+export const delboyProfile = async (req, res) => {
+  try {
+    const { email, phone } = req.body;
+
+    const user = await DelBoy.findOne({
+      gmail: email.trim().toLowerCase(),
+      number: phone.trim(),
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.json({
+      success: true,
+      data: user,
     });
   } catch (error) {
-    res.json({
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+export const createDelBoy = async (req, res) => {
+  try {
+    const { gmail, number, userSpecialId } = req.body;
+
+    if (!gmail || !number || !userSpecialId) {
+      return res.status(400).json({
+        success: false,
+        message: "gmail, number and userSpecialId are required",
+      });
+    }
+
+    // Find delivery record
+    const deliver = await Deliver.findOne({
+      gmail: gmail.trim().toLowerCase(),
+      userSpecialId: userSpecialId.trim(),
+    });
+
+    if (!deliver) {
+      return res.status(404).json({
+        success: false,
+        message: "Delivery record not found",
+      });
+    }
+
+    // Verify phone number
+    if (String(deliver.number) !== String(number)) {
+      return res.status(400).json({
+        success: false,
+        message: "Phone number does not match",
+      });
+    }
+
+    // Check if DelBoy already exists
+    const existingDelBoy = await DelBoy.findOne({
+      userSpecialId: deliver.userSpecialId,
+    });
+
+    if (existingDelBoy) {
+      return res.status(400).json({
+        success: false,
+        message: "DelBoy already exists",
+        data: existingDelBoy,
+      });
+    }
+
+    // Create DelBoy using Deliver data
+    const delBoy = await DelBoy.create({
+      name: deliver.name,
+      number: deliver.number,
+      gmail: deliver.gmail,
+      userSpecialId: deliver.userSpecialId,
+      vehicle: deliver.vehicle,
+      isOnline: false,
+      isActive: false,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "DelBoy created successfully",
+      delBoyId: delBoy._id,
+      data: delBoy,
+    });
+
+  } catch (error) {
+    console.error("Create DelBoy Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const getAllDeliveryBoys = async (req, res) => {
+  try {
+    const deliveryBoys = await DelBoy.find().sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      total: deliveryBoys.length,
+      data: deliveryBoys,
+    });
+  } catch (error) {
+    console.error("getAllDeliveryBoys Error:", error);
+
+    res.status(500).json({
       success: false,
       message: error.message,
     });
@@ -43,9 +202,9 @@ export const deleteDeliveryBoy = async (req, res) => {
 };
 
 
-  export const onlineAll= async (req, res) => {
+export const onlineAll = async (req, res) => {
   try {
-    const boys = await DelBoy.find({ isOnline: true },{ status: "online" });
+    const boys = await DelBoy.find({ isOnline: true }, { status: "online" });
     res.json({ success: true, boys });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -162,8 +321,8 @@ export const createDelBoys = async (req, res) => {
 };
 
 
-
-export const createDelBoy = async (req, res) => {
+//old code
+/*export const createDelBoy = async (req, res) => {
   try {
     const { userSpecialId } = req.body;
 
@@ -215,19 +374,19 @@ export const createDelBoy = async (req, res) => {
       message: "Server error",
     });
   }
-};
+};*/
 
 
 export const setOnline = async (req, res) => {
   await DelBoy.findByIdAndUpdate(req.body.id, {
-    isOnline: true,status:"online"
+    isOnline: true, status: "online"
   });
 
   res.json({ success: true });
 };
 export const setOffline = async (req, res) => {
   await DelBoy.findByIdAndUpdate(req.body.id, {
-    isOnline: false,status:"offline"
+    isOnline: false, status: "offline"
   });
 
   res.json({ success: true });

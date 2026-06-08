@@ -1,4 +1,4 @@
-/*import mongoose from "mongoose";
+/*import mongoose from "mongoose";  //old code
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -27,6 +27,8 @@ db.on('connection',(error) =>{
 })
 
 export default db;
+
+// new code db
 */
 import mongoose from "mongoose";
 import dotenv from "dotenv";

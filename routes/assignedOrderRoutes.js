@@ -41,8 +41,45 @@ assignRouter.get("/all", getAllDeliveryInfo);
 // ✅ delete
 assignRouter.delete("/delete/:id", deleteDeliveryInfo);
 //map
-assignRouter.post("/extract", getLatLngFromLink);
+assignRouter.post("/notwork", getLatLngFromLink);
 assignRouter.get("/all", getAllAssignedOrders);
 assignRouter.get("/history/:delBoyId", getDelBoyHistory);
+assignRouter.post("/extract", async (req, res) => {
+  try {
+    const { linkdata } = req.body;
+
+    if (!linkdata) {
+      return res.json({
+        success: false,
+        message: "Map link required",
+      });
+    }
+
+    // Example:
+    // https://www.google.com/maps?q=21.4932,86.9432
+
+    const match = linkdata.match(
+      /(-?\d+\.\d+),\s*(-?\d+\.\d+)/
+    );
+
+    if (!match) {
+      return res.json({
+        success: false,
+        message: "Invalid Google Map link",
+      });
+    }
+
+    res.json({
+      success: true,
+      lat: parseFloat(match[1]),
+      lng: parseFloat(match[2]),
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
 export default assignRouter;
 

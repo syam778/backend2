@@ -1,4 +1,4 @@
-/*import express from "express";
+/*import express from "express"; // old code
 import cors from "cors";
 import db from "./config/db.js";
 import foodRouter from "./routes/foodRoutes.js";
@@ -142,13 +142,18 @@ server.listen(PORT, () => { //just chenge server
 
 export {server,io}
 
+
+
+
 */
+// new code 
 import express from "express";
 import cors from "cors";
 import db from "./config/db.js";
 import foodRouter from "./routes/foodRoutes.js";
 import http from "http";
 import { Server } from "socket.io";
+import fileUpload from "express-fileupload";
 import path from "path";
 import dotenv from "dotenv";
 
@@ -167,8 +172,14 @@ import LogicstoreRouter from "./routes/logicstoreRoute.js";
 
 dotenv.config();
 
-
-
+/*app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+    createParentPath: true,
+  })
+);
+*/
 const app = express();
 const server = http.createServer(app);
 
@@ -179,7 +190,7 @@ const PORT = process.env.PORT || 3000;
 
 
 
-/*// ✅ Allowed origins
+/*
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
@@ -240,6 +251,7 @@ app.use(
 app.use(express.json());
 
 // ✅ Static localhost
+app.use("/images", express.static("uploads"));
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.use("/images", express.static(path.join(process.cwd(), "uploads")));
 //live host 

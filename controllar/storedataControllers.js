@@ -165,6 +165,57 @@ export const getStore = async (req, res) => {
       .json({ success: false, message: "Server error", error: err.message });
   }
 };
+export const verifyUser = async (req, res) => {
+  try {
+    let { email, phone, storeName } = req.body;
+
+    if (!email || !phone || !storeName) {
+      return res.status(400).json({
+        success: false,
+        message: "Email, phone and storeName are required",
+      });
+    }
+
+    email = email.trim().toLowerCase();
+    phone = phone.trim();
+    storeName = storeName.trim();
+
+    const user = await StoreData.findOne({
+      email,
+      phone,
+      storeName,
+    });
+
+    console.log("Search Data:", {
+      email,
+      phone,
+      storeName,
+    });
+
+    console.log("Found User:", user);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Store not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "User verified successfully",
+      data: user,
+    });
+
+  } catch (error) {
+    console.error("Verify Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
 
 
 

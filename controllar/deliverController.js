@@ -2,6 +2,126 @@
 import Deliver from "../models/deliverModel.js"; // ✅
 
 
+/*export const verifyUser = async (req, res) => {//old code
+  try {
+    console.log("BODY:", req.body);
+
+    const { gmail, number, userSpecialId } = req.body;
+
+    const deliver = await Deliver.findOne({
+      gmail: gmail.trim().toLowerCase(),
+      userSpecialId: userSpecialId.trim(),
+    });
+
+    console.log("FOUND:", deliver);
+
+    if (!deliver) {
+      return res.status(404).json({
+        success: false,
+        message: "Delivery Boy not found",
+      });
+    }
+
+    if (String(deliver.number) !== String(number)) {
+      return res.status(400).json({
+        success: false,
+        message: "Phone number does not match",
+      });
+    }
+
+    return res.json({
+      success: true,
+      data: deliver,
+    });
+
+  } catch (error) {
+    console.log("BACKEND ERROR:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};*/
+
+export const verifyUser = async (req, res) => {
+  try {
+    let { gmail, number, userSpecialId } = req.body;
+
+    console.log("Received Data:", req.body);
+
+    // Validation
+    if (!gmail || !number || !userSpecialId) {
+      return res.status(400).json({
+        success: false,
+        message: "Gmail, Phone Number and User Special ID are required",
+      });
+    }
+
+    // Normalize values
+    gmail = gmail.trim().toLowerCase();
+    number = String(number).trim();
+    userSpecialId = userSpecialId.trim();
+
+    // Find delivery boy
+    const user = await Deliver.findOne({
+      gmail,
+      userSpecialId,
+    });
+
+    console.log("Found User:", user);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Delivery Boy not found",
+      });
+    }
+
+    // Compare phone number
+    if (String(user.number).trim() !== number) {
+      return res.status(400).json({
+        success: false,
+        message: "Phone number does not match",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Verification successful",
+      data: user,
+    });
+
+  } catch (error) {
+    console.error("Verify Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+
+
+export const getAllDeliveryBoys = async (req, res) => {
+  try {
+    const data = await DelBoy.find().sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      data,
+      total: data.length,
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 
 /* ➕ Create Delivery Boy */
 export const createDeliver = async (req, res) => {

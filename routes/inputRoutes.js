@@ -1,11 +1,11 @@
 import express from "express";
-import { createDelProfileUser, createUser, userProfile, userProfilenano, verifyUser } from "../controllar/inputcontrollars.js";
+import { createDelProfileUser, createUser, userProfile, userProfilenano, verifyUser,  } from "../controllar/inputcontrollars.js";
 
 
 const inputRouter = express.Router();
 
 inputRouter.post("/create", createUser);
-inputRouter.post("/verify", verifyUser);
+inputRouter.post("/verify", verifyUser); //not working
 inputRouter.post("/userprofile", userProfile);
 inputRouter.post("/userprofilenano", userProfilenano);
 inputRouter.post("/createdelprofileuser", createDelProfileUser);

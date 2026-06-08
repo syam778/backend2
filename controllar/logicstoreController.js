@@ -1,4 +1,5 @@
 
+
 import Logicstore from "../models/logicstoreModel.js";
 import StoreData from "../models/storedataModel.js";
 //import Logicstore from "../models/logicstoreModel.js";
@@ -53,7 +54,23 @@ export const verifyStore = async (req, res) => {
       pincode,
     } = req.body;
 
-    /* ================= FIND STORE DATA ================= */
+    // Validate required fields
+    if (
+      !username ||
+      !storeId ||
+      !gmail ||
+      !phone ||
+      !address ||
+      !street ||
+      !pincode
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
+
+    // Find matching store
     const store = await StoreData.findOne({
       username,
       storeId,
@@ -64,18 +81,25 @@ export const verifyStore = async (req, res) => {
       pincode,
     });
 
-    /* ================= STORE VERIFY RECORD ================= */
+    // Verification failed
     if (!store) {
-      const failedVerify = await Logicstore.create({
-        username,
-        storeId,
-        gmail,
-        phone,
-        address,
-        street,
-        pincode,
-        status: "failed",
-      });
+      const failedVerify = await Logicstore.findOneAndUpdate(
+        { username },
+        {
+          username,
+          storeId,
+          gmail,
+          phone,
+          address,
+          street,
+          pincode,
+          status: "failed",
+        },
+        {
+          new: true,
+          upsert: true,
+        }
+      );
 
       return res.status(404).json({
         success: false,
@@ -84,18 +108,25 @@ export const verifyStore = async (req, res) => {
       });
     }
 
-    /* ================= SUCCESS ================= */
-    const verifiedStore = await Logicstore.create({
-      username,
-      storeId,
-      gmail,
-      phone,
-      address,
-      street,
-      pincode,
-      status: "verified",
-      storeRef: store._id,
-    });
+    // Verification success
+    const verifiedStore = await Logicstore.findOneAndUpdate(
+      { username },
+      {
+        username,
+        storeId,
+        gmail,
+        phone,
+        address,
+        street,
+        pincode,
+        status: "verified",
+        storeRef: store._id,
+      },
+      {
+        new: true,
+        upsert: true,
+      }
+    );
 
     return res.status(200).json({
       success: true,
@@ -104,12 +135,22 @@ export const verifyStore = async (req, res) => {
     });
 
   } catch (error) {
-    res.status(500).json({
+    console.error("Store Verification Error:", error);
+
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: "Username already exists",
+      });
+    }
+
+    return res.status(500).json({
       success: false,
       message: error.message,
     });
   }
 };
+
 
 
 
@@ -180,6 +221,49 @@ export const quickVerifyStore = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Server error: " + error.message,
+    });
+  }
+};
+
+
+export const getStoreProfile = async (req, res) => {
+  try {
+    let { gmail, phone } = req.body;
+
+    if (!gmail || !phone) {
+      return res.status(400).json({
+        success: false,
+        message: "Gmail and phone are required",
+      });
+    }
+
+    gmail = gmail.trim().toLowerCase();
+    phone = phone.trim();
+
+    const store = await StoreData.findOne({
+      gmail,
+      phone,
+    });
+
+    if (!store) {
+      return res.status(404).json({
+        success: false,
+        message: "Store not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Store found",
+      data: store,
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
     });
   }
 };

@@ -1,5 +1,5 @@
 import express from "express";
-import { deleteStoreInfo, getAllStoreInfo, quickVerifyStore, verifyStore } from "../controllar/logicstoreController.js";
+import { deleteStoreInfo, getAllStoreInfo, quickVerifyStore, verifyStore,getStoreProfile } from "../controllar/logicstoreController.js";
 //import { deleteStoreInfo, getAllStoreInfo, quickVerifyStore, verifyStore } from "../controllar/logicstoreController.js";
 
 
@@ -9,6 +9,7 @@ LogicstoreRouter.post("/verify", verifyStore);
 
 LogicstoreRouter.post("/quick-verify", quickVerifyStore);
 LogicstoreRouter.get("/all", getAllStoreInfo);
+LogicstoreRouter.post("/store-profile", getStoreProfile);
 
 // ✅ DELETE STORE INFO
 LogicstoreRouter.delete("/delete/:id", deleteStoreInfo);

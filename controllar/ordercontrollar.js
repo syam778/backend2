@@ -1104,6 +1104,62 @@ export const getOrdersByUserId = async (req, res) => {
   }
 };
 
+/*const extractLatLng = (link) => {
+  if (!link) return null;
+
+  // For links containing @lat,lng
+  let match = link.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+
+  if (match) {
+    return {
+      lat: parseFloat(match[1]),
+      lng: parseFloat(match[2]),
+    };
+  }
+
+  // For links containing q=lat,lng
+  match = link.match(/q=(-?\d+\.\d+),(-?\d+\.\d+)/);
+
+  if (match) {
+    return {
+      lat: parseFloat(match[1]),
+      lng: parseFloat(match[2]),
+    };
+  }
+
+  return null;
+};
+
+const calculateDistanceKm = (
+  lat1,
+  lon1,
+  lat2,
+  lon2
+) => {
+  const R = 6371;
+
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+
+  const a =
+    Math.sin(dLat / 2) *
+      Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) *
+      Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+
+  const c =
+    2 *
+    Math.atan2(
+      Math.sqrt(a),
+      Math.sqrt(1 - a)
+    );
+
+  return R * c;
+};*/
+//map location data new
+
 
 
 export { placeOrder, updateOrderStatus, verifyOrder, userOrder, listOrders, updateStatus, removeOrder, getUserProfile }
