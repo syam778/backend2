@@ -223,9 +223,10 @@ const allowedOrigins = [
   "https://user-pop.netlify.app",
 
   // ✅ Old Netlify (if still used)
-  "https://admin-ad.netlify.app",
-  "https://admin-addd.netlify.app",
-  "https://store-ad.netlify.app",
+  "https://admin-at.netlify.app",
+  "https://user-at.netlify.app",
+  "https://store-at.netlify.app",
+  "https://delivery-at.netlify.app",
 
    "https://admin-mop.netlify.app",
   "https://delivery-mop.netlify.app",
