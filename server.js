@@ -150,6 +150,8 @@ export {server,io}
 import express from "express";
 import cors from "cors";
 import db from "./config/db.js";
+import "./config/db.js";
+
 import foodRouter from "./routes/foodRoutes.js";
 import http from "http";
 import { Server } from "socket.io";
@@ -170,6 +172,7 @@ import assignRouter from "./routes/assignedOrderRoutes.js";
 import StoreRouter from "./routes/storedataRoute.js";
 import LogicstoreRouter from "./routes/logicstoreRoute.js";
 
+
 dotenv.config();
 
 /*app.use(
@@ -181,6 +184,7 @@ dotenv.config();
 );
 */
 const app = express();
+
 const server = http.createServer(app);
 
 // ✅ FIX PORT
@@ -256,7 +260,7 @@ app.use("/images", express.static("uploads"));
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.use("/images", express.static(path.join(process.cwd(), "uploads")));
 //live host 
-app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+//app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.use("/images", express.static(path.join(process.cwd(), "uploads/payments")));
 
 
