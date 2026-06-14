@@ -229,7 +229,7 @@ const allowedOrigins = [
   // ✅ Old Netlify (if still used)
   "https://admin-my.netlify.app",
   "https://user-my.netlify.app",
-  "https://store-my.netlify.app",
+  "https://store-myy.netlify.app",
   "https://delivery-my.netlify.app",
 
    "https://admin-mop.netlify.app",
