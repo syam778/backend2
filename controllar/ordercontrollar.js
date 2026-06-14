@@ -88,7 +88,7 @@ const verifyOrder = async (req, res) => { //old code
 }
 const placeOrder = async (req, res) => { //old and veryimportant code"https://user-ad.netlify.app/"
   //const frontend_url = "http://localhost:5175/";
-  const frontend_url = "https://user-pop.netlify.app";
+  const frontend_url = "https://user-my.netlify.app";
 
   try {
     // 🔐 Get userId from token middleware
